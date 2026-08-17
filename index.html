@@ -59,10 +59,18 @@
             color: #93c5fd;
             font-size: 1.1rem;
             font-weight: 400;
-            margin: 0 0 20px 0;
+            margin: 0 0 24px 0;
         }
 
-        /* 🏸 ปุ่มนำทางจับคู่แข่งขัน */
+        /* Group ปุ่มนำทางใน Hero Banner */
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* 🏸 ปุ่มนำทางหลัก */
         .hero-action-btn {
             display: inline-flex;
             align-items: center;
@@ -81,6 +89,16 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 24px rgba(16, 185, 129, 0.45);
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        /* 👤 ปุ่มนำทางไปหน้าสมาชิก */
+        .hero-action-btn.member-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+        }
+        .hero-action-btn.member-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            box-shadow: 0 10px 24px rgba(59, 130, 246, 0.45);
         }
 
         /* 🎯 Dashboard Grid Cards */
@@ -175,7 +193,6 @@
             align-items: center;
             margin-bottom: 20px;
         }
-        /* ปุ่มสลับแสดง/ซ่อนคิวทั้งหมด */
         .queue-toggle-btn {
             background: #eff6ff;
             color: #2563eb;
@@ -504,10 +521,15 @@
                 <h1>Tob Ngueak San Badminton</h1>
                 <p>บรรยากาศเป็นกันเอง เพื่อนดี ตีมันส์</p>
 
-                <!-- ปุ่มนำทางไป game.html (จับคู่แข่งขัน) -->
-                <a href="game.html" class="hero-action-btn">
-                    🏸 จับคู่แข่งขัน
-                </a>
+                <!-- ปุ่มกดนำทางหลักในหน้า Hero Banner -->
+                <div class="hero-actions">
+                    <a href="game.html" class="hero-action-btn">
+                        🏸 จับคู่แข่งขัน
+                    </a>
+                    <a href="member.html" class="hero-action-btn member-btn">
+                        👤 ระบบสมาชิก
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -537,13 +559,13 @@
             </div>
         </a>
 
-        <a href="#" class="stat-card-link">
+        <a href="member.html" class="stat-card-link">
             <div class="home-stat-card">
                 <div class="stat-icon">👥</div>
                 <div>
                     <p>สมาชิกออนไลน์</p>
                     <h2>15 คน</h2>
-                    <small><span class="pulse-dot"></span> กำลังออนไลน์</small>
+                    <small><span class="pulse-dot"></span> คลิกเพื่อเปิดระบบสมาชิก</small>
                 </div>
             </div>
         </a>
@@ -566,7 +588,6 @@
         <div class="queue-header">
             <h2 class="section-title">🏸 คิวการเล่นปัจจุบัน</h2>
             
-            <!-- ปุ่มสลับแสดงคิวทั้งหมด / ปิดการแสดงคิว -->
             <button id="toggleQueueBtn" class="queue-toggle-btn" onclick="toggleAllQueues()">
                 แสดงคิวทั้งหมด ▾
             </button>
@@ -719,10 +740,8 @@
 </main>
 
 <script>
-    // ตัวแปรเก็บสถานะการเปิด/ปิดคิวทั้งหมด
     let isQueueExpanded = false;
 
-    // ฟังก์ชันสลับการแสดงคิวทั้งหมด / ปิดการแสดงคิว
     function toggleAllQueues() {
         isQueueExpanded = !isQueueExpanded;
         const btn = document.getElementById('toggleQueueBtn');
@@ -739,13 +758,11 @@
         renderLiveQueue();
     }
 
-    // สคริปต์เปิด/ปิด ระดับฝีมือ
     function toggleSkillSection() {
         const card = document.getElementById('skillCard');
         card.classList.toggle('active');
     }
 
-    // Database ผู้เล่นสำหรับแปลง id เป็นชื่อ
     const playersDB = [
       { id: 'p1', name: 'Marcus L.' },
       { id: 'p2', name: 'Chloe Tan' },
@@ -760,7 +777,6 @@
         return found ? found.name : id;
     }
 
-    // ฟังก์ชันสำหรับดึงและแสดงผลคิวแข่งจาก game.html แบบ Real-Time
     function renderLiveQueue() {
         const queueContainer = document.getElementById('queue-container');
         if (!queueContainer) return;
@@ -776,7 +792,6 @@
             }
         }
 
-        // อัปเดตสถิติจำนวนเกมใน Stat Dashboard
         const statTodayGames = document.getElementById('statTodayGames');
         const statWaitingQueue = document.getElementById('statWaitingQueue');
         if (statTodayGames) statTodayGames.textContent = `${queueData.length} เกม`;
@@ -794,7 +809,6 @@
             return;
         }
 
-        // ถ้าเปิด isQueueExpanded จะแสดงคิวทั้งหมด ถ้าปิดจะตัดแสดงผลแค่ 2 คิวล่าสุด
         const displayData = isQueueExpanded ? queueData : queueData.slice(0, 2);
 
         queueContainer.innerHTML = displayData.map(item => {
@@ -832,18 +846,15 @@
         }).join('');
     }
 
-    // โหลดครั้งแรกเมื่อเปิดหน้าเว็บ
     document.addEventListener('DOMContentLoaded', () => {
         renderLiveQueue();
 
-        // 1. รับ Event เมื่อมีการเปลี่ยนแปลงข้อมูลใน localStorage จาก Tab อื่น
         window.addEventListener('storage', (e) => {
             if (e.key === 'courtsync_queue') {
                 renderLiveQueue();
             }
         });
 
-        // 2. รับ BroadcastChannel Event สำหรับการอัปเดตทันที
         if (window.BroadcastChannel) {
             const syncChannel = new BroadcastChannel('courtsync_queue_channel');
             syncChannel.onmessage = () => {
