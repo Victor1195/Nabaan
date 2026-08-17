@@ -573,9 +573,29 @@
     const historyContainer = document.getElementById('history-list-container');
     const btnSaveScore = document.getElementById('btn-save-score');
 
+    // LocalStorage Operations
+    function saveData() {
+      localStorage.setItem('ngueak_waitingPool', JSON.stringify(waitingPool));
+      localStorage.setItem('ngueak_queues', JSON.stringify(queues));
+      localStorage.setItem('ngueak_history', JSON.stringify(history));
+    }
+
+    function loadData() {
+      const savedPool = localStorage.getItem('ngueak_waitingPool');
+      const savedQueues = localStorage.getItem('ngueak_queues');
+      const savedHistory = localStorage.getItem('ngueak_history');
+
+      if (savedPool !== null) waitingPool = JSON.parse(savedPool);
+      if (savedQueues !== null) queues = JSON.parse(savedQueues);
+      if (savedHistory !== null) history = JSON.parse(savedHistory);
+    }
+
     // Initialize UI
     function init() {
+      loadData(); // ดึงข้อมูลที่บันทึกไว้ก่อน
       updateWaitingUI();
+      renderQueueList();
+      renderHistoryList();
       
       btnRandom.addEventListener('click', randomizeMatch);
       btnLock.addEventListener('click', toggleLockTeamA);
@@ -646,12 +666,14 @@
     function addMemberToPool(name) {
       if (!waitingPool.includes(name)) {
         waitingPool.push(name);
+        saveData();
         updateWaitingUI();
       }
     }
 
     function removeMemberFromPool(index) {
       waitingPool.splice(index, 1);
+      saveData();
       updateWaitingUI();
     }
 
@@ -742,6 +764,8 @@
 
       queues.push(matchData);
       waitingPool = waitingPool.filter(player => !matchPlayers.includes(player));
+      
+      saveData();
       updateWaitingUI();
 
       if (isLockedTeamA) toggleLockTeamA();
@@ -825,11 +849,17 @@
 
       // Return players to waiting pool
       const matchPlayers = [...activeMatchForScore.teamA, ...activeMatchForScore.teamB];
-      matchPlayers.forEach(player => addMemberToPool(player));
+      matchPlayers.forEach(player => {
+        if (!waitingPool.includes(player)) {
+          waitingPool.push(player);
+        }
+      });
 
       // Remove from queues
       queues = queues.filter(q => q.id !== activeMatchForScore.id);
 
+      saveData();
+      updateWaitingUI();
       toggleScoreModal(false);
       renderQueueList();
       renderHistoryList();
