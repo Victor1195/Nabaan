@@ -407,6 +407,9 @@
     </div>
 
     <script>
+        // URL ของ Google Apps Script Web App
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxC4LZ52h4sfucJxocXxG2Jy2S2otrZ5eniUDKBAtNxE8iq79r2BQQPqnD7uZnHVM1YeA/exec';
+
         const openModalBtn = document.getElementById('openModalBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const cancelBtn = document.getElementById('cancelBtn');
@@ -452,24 +455,24 @@
             return newCard;
         }
 
-        // ดึงข้อมูลผ่าน google.script.run
-        function loadMembers() {
-            google.script.run
-                .withSuccessHandler((members) => {
-                    memberGrid.innerHTML = '';
-                    if (members && members.length > 0) {
-                        members.forEach(member => {
-                            memberGrid.appendChild(createCardElement(member));
-                        });
-                    } else {
-                        memberGrid.innerHTML = '<div class="loading-text">ยังไม่มีสมาชิกในระบบ</div>';
-                    }
-                })
-                .withFailureHandler((err) => {
-                    console.error(err);
-                    memberGrid.innerHTML = '<div class="loading-text">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
-                })
-                .getMembersData();
+        // ดึงข้อมูลผ่าน fetch API ไปยัง Web App URL
+        async function loadMembers() {
+            try {
+                const response = await fetch(`${WEB_APP_URL}?action=getMembersData`);
+                const members = await response.json();
+
+                memberGrid.innerHTML = '';
+                if (members && members.length > 0) {
+                    members.forEach(member => {
+                        memberGrid.appendChild(createCardElement(member));
+                    });
+                } else {
+                    memberGrid.innerHTML = '<div class="loading-text">ยังไม่มีสมาชิกในระบบ</div>';
+                }
+            } catch (err) {
+                console.error(err);
+                memberGrid.innerHTML = '<div class="loading-text">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
+            }
         }
 
         function fileToBase64(file) {
@@ -481,7 +484,7 @@
             });
         }
 
-        // บันทึกสมาชิกผ่าน google.script.run
+        // บันทึกสมาชิกผ่าน fetch API (POST) ไปยัง Web App URL
         addMemberForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -497,6 +500,7 @@
                 const base64Data = await fileToBase64(imgFile);
                 
                 const payload = {
+                    action: 'saveMember',
                     name: name,
                     level: level,
                     hand: hand,
@@ -504,24 +508,22 @@
                     fileData: base64Data
                 };
 
-                google.script.run
-                    .withSuccessHandler((newMember) => {
-                        const emptyMsg = memberGrid.querySelector('.loading-text');
-                        if (emptyMsg) emptyMsg.remove();
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                const newMember = await response.json();
 
-                        memberGrid.appendChild(createCardElement(newMember));
-                        closeModal();
-                        alert('บันทึกข้อมูลสำเร็จ!');
-                    })
-                    .withFailureHandler((err) => {
-                        alert('เกิดข้อผิดพลาด: ' + err.message);
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = 'บันทึกข้อมูล';
-                    })
-                    .saveMemberToSheetAndDrive(payload);
+                const emptyMsg = memberGrid.querySelector('.loading-text');
+                if (emptyMsg) emptyMsg.remove();
+
+                memberGrid.appendChild(createCardElement(newMember));
+                closeModal();
+                alert('บันทึกข้อมูลสำเร็จ!');
 
             } catch (error) {
-                alert('เกิดข้อผิดพลาดในการอ่านไฟล์ภาพ');
+                alert('เกิดข้อผิดพลาด: ' + error.message);
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'บันทึกข้อมูล';
             }
