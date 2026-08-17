@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าแรก - Tob Ngueak San Badminton</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #3b82f6 100%);
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-gold: #f59e0b;
+            --accent-silver: #94a3b8;
+            --accent-bronze: #d97706;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-hover: 0 12px 24px rgba(0,0,0,0.08);
+        }
+
+        body {
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .home-page {
+            font-family: 'Kanit', system-ui, -apple-system, sans-serif;
+            color: var(--text-main);
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 20px 16px 60px;
+        }
+
+        /* 🏸 Hero Banner */
+        .hero-section {
+            background: var(--primary-gradient);
+            border-radius: var(--radius-lg);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 16px 32px rgba(30, 58, 138, 0.2);
+        }
+        .hero-overlay {
+            padding: 48px 24px;
+            text-align: center;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent);
+        }
+        .hero-content h1 {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: clamp(1.8rem, 4vw, 2.75rem);
+            letter-spacing: -0.5px;
+            margin: 0 0 8px 0;
+        }
+        .hero-content p {
+            color: #93c5fd;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin: 0 0 24px 0;
+        }
+
+        /* Group ปุ่มนำทางใน Hero Banner */
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* 🏸 ปุ่มนำทางหลัก */
+        .hero-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 12px 26px;
+            border-radius: 999px;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+            transition: all 0.25s ease;
+        }
+        .hero-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.45);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        /* 👤 ปุ่มนำทางไปหน้าสมาชิก */
+        .hero-action-btn.member-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+        }
+        .hero-action-btn.member-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            box-shadow: 0 10px 24px rgba(59, 130, 246, 0.45);
+        }
+
+        /* 🎯 Dashboard Grid Cards */
+        .home-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-bottom: 36px;
+        }
+        .stat-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .home-stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #e2e8f0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .stat-card-link:hover .home-stat-card {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: #cbd5e1;
+        }
+        .stat-icon {
+            font-size: 1.75rem;
+            background: #f1f5f9;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .home-stat-card p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .home-stat-card h2 {
+            margin: 2px 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .home-stat-card small {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse 1.8s infinite;
+        }
+        @keyframes pulse {
+            70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        .admin-income-card .icon-green {
+            background: #dcfce7;
+        }
+
+        /* ⚡ Live Queue Section */
+        .live-queue-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 36px;
+            border: 1px solid #e2e8f0;
+        }
+        .queue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .queue-toggle-btn {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .queue-toggle-btn:hover {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .queue-toggle-btn.active-close {
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+        .queue-toggle-btn.active-close:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .queue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .queue-card {
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        .queue-card.playing {
+            border-left: 5px solid #22c55e;
+        }
+        .queue-card.waiting {
+            border-left: 5px solid #f59e0b;
+        }
+        .queue-card.finished {
+            border-left: 5px solid #334155;
+        }
+        .queue-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .queue-badge.playing { background: #dcfce7; color: #15803d; }
+        .queue-badge.waiting { background: #fef3c7; color: #b45309; }
+        .queue-badge.finished { background: #e2e8f0; color: #334155; }
+        
+        .teams-versus {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+        .team {
+            flex: 1;
+        }
+        .vs {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            padding: 0 10px;
+        }
+
+        /* ⚔️ Expandable Wuxia Skill Section */
+        .skill-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 36px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .skill-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .skill-toggle-hint {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .skill-toggle-icon {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+        .skill-card.active .skill-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .skill-card-body {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin-top 0.3s ease;
+            margin-top: 0;
+        }
+        .skill-card.active .skill-card-body {
+            max-height: 1200px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            border-left: 5px solid #94a3b8;
+        }
+        .skill-item.lv1 { border-left-color: #38bdf8; }
+        .skill-item.lv2 { border-left-color: #4ade80; }
+        .skill-item.lv3 { border-left-color: #facc15; }
+        .skill-item.lv4 { border-left-color: #fb923c; }
+        .skill-item.lv5 { border-left-color: #f87171; }
+        .skill-item.lv6 { border-left-color: #a855f7; }
+
+        .skill-text b {
+            display: block;
+            font-size: 0.975rem;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+        .skill-text span {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            display: block;
+        }
+        .skill-lv {
+            font-weight: 800;
+            background: #0f172a;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.775rem;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        /* 🏆 Leaderboard Section */
+        .leaderboard-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #e2e8f0;
+        }
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .leaderboard-header p {
+            margin: 2px 0 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        .leaderboard-more {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+        .leaderboard-more:hover { opacity: 0.8; }
+
+        /* 🥇 Podium UI */
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-top: 16px;
+        }
+        .rank-card {
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            padding: 20px 12px 16px;
+            text-align: center;
+            flex: 1;
+            max-width: 170px;
+            position: relative;
+            border: 1px solid #e2e8f0;
+            box-sizing: border-box;
+        }
+        .rank-card img {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 10px;
+            display: block;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .rank-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            color: #fff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -22px auto 8px;
+            position: relative;
+            z-index: 2;
+            font-size: 0.8rem;
+        }
+        .rank-card h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 4px 0 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .rank-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .rank-1 {
+            background: linear-gradient(180deg, #fefce8 0%, #ffffff 100%);
+            border: 2px solid #fde047;
+            transform: translateY(-12px);
+        }
+        .rank-1 .rank-badge { background: var(--accent-gold); }
+        .rank-1 .crown {
+            font-size: 1.6rem;
+            position: absolute;
+            top: -26px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .rank-2 {
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            border: 1px solid #cbd5e1;
+        }
+        .rank-2 .rank-badge { background: var(--accent-silver); }
+
+        .rank-3 {
+            background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+            border: 1px solid #ffedd5;
+        }
+        .rank-3 .rank-badge { background: var(--accent-bronze); }
+
+        /* 📋 Ranking List */
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .ranking-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            background: #f8fafc;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        .ranking-row.header {
+            background: transparent;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 4px 18px;
+        }
+        .ranking-col-rank { width: 12%; font-weight: 700; color: var(--text-muted); }
+        .ranking-col-name { width: 63%; font-weight: 600; color: var(--text-main); }
+        .ranking-col-score { width: 25%; text-align: right; font-weight: 700; color: #2563eb; }
+    </style>
+</head>
+<body>
+
+<main class="home-page">
+
+    <!-- 🏸 Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Tob Ngueak San Badminton</h1>
+                <p>บรรยากาศเป็นกันเอง เพื่อนดี ตีมันส์</p>
+
+                <!-- ปุ่มกดนำทางหลักในหน้า Hero Banner -->
+                <div class="hero-actions">
+                    <a href="game.html" class="hero-action-btn">
+                        🏸 จับคู่แข่งขัน
+                    </a>
+                    <a href="member.html" class="hero-action-btn member-btn">
+                        👤 ระบบสมาชิก
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🎯 Grid Dashboard STAT -->
+    <section class="home-stat-grid">
+
+        <a href="game.html" class="stat-card-link">
+            <div class="home-stat-card">
+                <div class="stat-icon">🏸</div>
+                <div>
+                    <p>แข่งขันวันนี้</p>
+                    <h2 id="statTodayGames">12 เกม</h2>
+                    <small>คลิกเพื่อดูตารางแข่ง</small>
+                </div>
+            </div>
+        </a>
+
+        <a href="game.html" class="stat-card-link">
+            <div class="home-stat-card">
+                <div class="stat-icon">⏳</div>
+                <div>
+                    <p>รอแข่ง</p>
+                    <h2 id="statWaitingQueue">3 คิว</h2>
+                    <small>รอการจัดคู่</small>
+                </div>
+            </div>
+        </a>
+
+        <a href="member.html" class="stat-card-link">
+            <div class="home-stat-card">
+                <div class="stat-icon">👥</div>
+                <div>
+                    <p>สมาชิกออนไลน์</p>
+                    <h2>15 คน</h2>
+                    <small><span class="pulse-dot"></span> คลิกเพื่อเปิดระบบสมาชิก</small>
+                </div>
+            </div>
+        </a>
+
+        <a href="#" class="stat-card-link">
+            <div class="home-stat-card admin-income-card">
+                <div class="stat-icon icon-green">💰</div>
+                <div>
+                    <p>รายได้วันนี้</p>
+                    <h2>2,400 บาท</h2>
+                    <small>ชำระเงินเรียบร้อย</small>
+                </div>
+            </div>
+        </a>
+
+    </section>
+
+    <!-- ⚡ Section: คิวการเล่นปัจจุบัน (แสดงผล Real-time จาก game.html) -->
+    <section class="live-queue-section">
+        <div class="queue-header">
+            <h2 class="section-title">🏸 คิวการเล่นปัจจุบัน</h2>
+            
+            <button id="toggleQueueBtn" class="queue-toggle-btn" onclick="toggleAllQueues()">
+                แสดงคิวทั้งหมด ▾
+            </button>
+        </div>
+
+        <div id="queue-container" class="queue-grid">
+            <!-- แสดงข้อมูลคิวการเล่นแบบ Real-time -->
+        </div>
+    </section>
+
+    <!-- ⚔️ Chinese Martial Arts Skill Level Section -->
+    <section class="skill-card" id="skillCard">
+        <div class="skill-card-header" onclick="toggleSkillSection()">
+            <h2 class="section-title">⚔️ ทำเนียบระดับยุทธภพ (ระดับฝีมือ)</h2>
+            <div class="skill-toggle-hint">
+                <span>เทียบขั้นกำลังภายใน</span>
+                <span class="skill-toggle-icon">▼</span>
+            </div>
+        </div>
+
+        <div class="skill-card-body">
+            <div class="skill-list">
+                <div class="skill-item lv1">
+                    <div class="skill-text">
+                        <b>ศิษย์ใหม่ฝึกหัด (ศิษย์สำนัก)</b>
+                        <span>เพิ่งก้าวเข้าสู่ยุทธภพ กุมกระบี่ (ไม้แบด) ยังไม่มั่นคง กำลังภายในยังอ่อนด้อย วิชาตัวเบาเพิ่งเริ่มฝึก เน้นยืนตั้งรับหน้าประตูสำนัก (หน้าเน็ต) ลงสนามประลองเพื่อสร้างเสริมสุขภาพและมิตรภาพ</span>
+                    </div>
+                    <div class="skill-lv">LV.1</div>
+                </div>
+
+                <div class="skill-item lv2">
+                    <div class="skill-text">
+                        <b>จอมยุทธ์เข้าสู่วงการ (ผู้ท่องยุทธภพ)</b>
+                        <span>เริ่มมีวิชาตัวเบาเคลื่อนพลอยทั่วคอร์ดได้ เสิร์ฟและรับเพลงไม้พื้นฐานได้ราบรื่น แม้กระบวนท่ายังมีจุดโหว่บางจังหวะหลุดคอร์ด แต่พร้อมร่วมประมือกับจอมยุทธ์ท่านอื่นได้อย่างสนุกสนาน</span>
+                    </div>
+                    <div class="skill-lv">LV.2</div>
+                </div>
+
+                <div class="skill-item lv3">
+                    <div class="skill-text">
+                        <b>ศิษย์เอกสำนัก (ยอดฝีมือ)</b>
+                        <span>กำลังภายในแน่นและแข็งแกร่ง มีดรรชนีตบหนักแน่นจากคอร์ดหลัง คุมวิชาตัวเบาและทิศทางลูกได้ดี แต่การประสานค่ายกลคู่และการอ่านกลยุทธ์ฝ่ายตรงข้ามยังต้องฝึกฝนเคี่ยวกรำอีกขั้น</span>
+                    </div>
+                    <div class="skill-lv">LV.3</div>
+                </div>
+
+                <div class="skill-item lv4">
+                    <div class="skill-text">
+                        <b>จอมยุทธ์เร้นกาย (ซ่อนคม)</b>
+                        <span>เดาทางยากยิ่ง! วันไหนลมปราณราบรื่นจะร่ายรำเพลงไม้ได้อย่างดุดัน วางลูกคมกริบ วันไหนธาตุไฟเข้าแทรกก็ทรงเสียได้ง่ายๆ แต่ยามเข้าจังหวะสังหาร เพลงไม้ตบหนักหน่วงเอาเรื่อง</span>
+                    </div>
+                    <div class="skill-lv">LV.4</div>
+                </div>
+
+                <div class="skill-item lv5">
+                    <div class="skill-text">
+                        <b>เจ้าสำนักประหารศัตรู (จอมยุทธ์ไร้พ่าย)</b>
+                        <span>วิชาตัวเบาสูงส่ง เพลงไม้คมกล้า แม่นยำทั้งลูกหยอดหน้าค่าย และลูกแทงลึก อ่านค่ายกลคู่ยุทธภพได้อย่างทะลุปรุโปร่ง ใครลงประมือด้วยต้องเตรียมรับแรงกระแทกจากดรรชนีตบอันรุนแรง</span>
+                    </div>
+                    <div class="skill-lv">LV.5</div>
+                </div>
+
+                <div class="skill-item lv6">
+                    <div class="skill-text">
+                        <b>ปรมาจารย์แห่งยุทธภพ (เซียนยุทธ์ไร้เทียมทาน)</b>
+                        <span>บรรลุขั้นสูงสุด! ขยับกายไร้ร่องรอย กวาดแกว่งไม้เหมือนไร้สภาพ ตีเหมือนไม่ได้ใช้ออกด้วยกำลังภายใน แต่กระบวนท่ากลับพุ่งเข้าจุดตายที่รับยากยิ่ง เปรียบดังเซียนยุทธ์ผู้หยั่งรู้ฟ้าดิน</span>
+                    </div>
+                    <div class="skill-lv">LV.6</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🏆 Leaderboard Section -->
+    <section class="leaderboard-section">
+
+        <div class="leaderboard-header">
+            <div>
+                <h2 class="section-title">🏆 อันดับประจำเดือน</h2>
+                <p>Top 10 ประจำเดือนนี้</p>
+            </div>
+
+            <a href="#" class="leaderboard-more">
+                ดูทั้งหมด &rarr;
+            </a>
+        </div>
+
+        <!-- Podium อันดับ 1-3 -->
+        <div class="podium">
+
+            <!-- อันดับ 2 -->
+            <div class="rank-card rank-2">
+                <img src="https://via.placeholder.com/150" alt="อันดับ 2" />
+                <div class="rank-badge">2</div>
+                <h3>โค้ชเอก</h3>
+                <p>1,450 คะแนน</p>
+            </div>
+
+            <!-- อันดับ 1 -->
+            <div class="rank-card rank-1">
+                <div class="crown">👑</div>
+                <img src="https://via.placeholder.com/150" alt="อันดับ 1" />
+                <div class="rank-badge">1</div>
+                <h3>กัปตันต๊อบ</h3>
+                <p>1,620 คะแนน</p>
+            </div>
+
+            <!-- อันดับ 3 -->
+            <div class="rank-card rank-3">
+                <img src="https://via.placeholder.com/150" alt="อันดับ 3" />
+                <div class="rank-badge">3</div>
+                <h3>หมวดนัท</h3>
+                <p>1,380 คะแนน</p>
+            </div>
+
+        </div>
+
+        <!-- รายชื่ออันดับ 4 - 10 -->
+        <div class="ranking-list">
+            <div class="ranking-row header">
+                <span class="ranking-col-rank">อันดับ</span>
+                <span class="ranking-col-name">ผู้เล่น</span>
+                <span class="ranking-col-score">คะแนน</span>
+            </div>
+
+            <div class="ranking-row">
+                <span class="ranking-col-rank">#4</span>
+                <span class="ranking-col-name">พี่บอล สมาชิกร่วมสนาม</span>
+                <span class="ranking-col-score">1,290</span>
+            </div>
+            <div class="ranking-row">
+                <span class="ranking-col-rank">#5</span>
+                <span class="ranking-col-name">ช่างต่าย มือตบหนัก</span>
+                <span class="ranking-col-score">1,210</span>
+            </div>
+            <div class="ranking-row">
+                <span class="ranking-col-rank">#6</span>
+                <span class="ranking-col-name">น้องมินต์ สายวางลูก</span>
+                <span class="ranking-col-score">1,180</span>
+            </div>
+            <div class="ranking-row">
+                <span class="ranking-col-rank">#7</span>
+                <span class="ranking-col-name">คุณเจมส์</span>
+                <span class="ranking-col-score">1,150</span>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+    let isQueueExpanded = false;
+
+    function toggleAllQueues() {
+        isQueueExpanded = !isQueueExpanded;
+        const btn = document.getElementById('toggleQueueBtn');
+        
+        if (btn) {
+            if (isQueueExpanded) {
+                btn.innerHTML = 'ปิดการแสดงคิวทั้งหมด ✕';
+                btn.classList.add('active-close');
+            } else {
+                btn.innerHTML = 'แสดงคิวทั้งหมด ▾';
+                btn.classList.remove('active-close');
+            }
+        }
+        renderLiveQueue();
+    }
+
+    function toggleSkillSection() {
+        const card = document.getElementById('skillCard');
+        card.classList.toggle('active');
+    }
+
+    const playersDB = [
+      { id: 'p1', name: 'Marcus L.' },
+      { id: 'p2', name: 'Chloe Tan' },
+      { id: 'p3', name: 'Ben Carter' },
+      { id: 'p4', name: 'Sophia N.' },
+      { id: 'p5', name: 'Alex Wong' },
+      { id: 'p6', name: 'Emily Rose' }
+    ];
+
+    function getPlayerName(id) {
+        const found = playersDB.find(p => p.id === id);
+        return found ? found.name : id;
+    }
+
+    function renderLiveQueue() {
+        const queueContainer = document.getElementById('queue-container');
+        if (!queueContainer) return;
+
+        const savedData = localStorage.getItem('courtsync_queue');
+        let queueData = [];
+
+        if (savedData) {
+            try {
+                queueData = JSON.parse(savedData);
+            } catch (e) {
+                console.error('Error parsing queue data:', e);
+            }
+        }
+
+        const statTodayGames = document.getElementById('statTodayGames');
+        const statWaitingQueue = document.getElementById('statWaitingQueue');
+        if (statTodayGames) statTodayGames.textContent = `${queueData.length} เกม`;
+        if (statWaitingQueue) {
+            const waitingCount = queueData.filter(q => !q.isFinished && !q.status.includes('ON COURT')).length;
+            statWaitingQueue.textContent = `${waitingCount} คิว`;
+        }
+
+        if (!queueData || queueData.length === 0) {
+            queueContainer.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 24px;">
+                    ยังไม่มีรายการจัดคิวการแข่งขันในขณะนี้
+                </div>
+            `;
+            return;
+        }
+
+        const displayData = isQueueExpanded ? queueData : queueData.slice(0, 2);
+
+        queueContainer.innerHTML = displayData.map(item => {
+            const nameA1 = getPlayerName(item.teamA[0]);
+            const nameA2 = item.teamA[1] ? getPlayerName(item.teamA[1]) : '';
+            const nameB1 = getPlayerName(item.teamB[0]);
+            const nameB2 = item.teamB[1] ? getPlayerName(item.teamB[1]) : '';
+
+            const teamAStr = nameA2 ? `${nameA1} / ${nameA2}` : nameA1;
+            const teamBStr = nameB2 ? `${nameB1} / ${nameB2}` : nameB1;
+
+            let cardClass = 'waiting';
+            let badgeClass = 'waiting';
+            
+            if (item.status.includes('ON COURT')) {
+                cardClass = 'playing';
+                badgeClass = 'playing';
+            } else if (item.isFinished) {
+                cardClass = 'finished';
+                badgeClass = 'finished';
+            }
+
+            const vsText = item.isFinished ? `<b style="color:#10b981;">${item.scoreA} - ${item.scoreB}</b>` : 'VS';
+
+            return `
+                <div class="queue-card ${cardClass}">
+                    <span class="queue-badge ${badgeClass}">${item.status}</span>
+                    <div class="teams-versus">
+                        <div class="team">${teamAStr}</div>
+                        <div class="vs">${vsText}</div>
+                        <div class="team" style="text-align: right;">${teamBStr}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderLiveQueue();
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'courtsync_queue') {
+                renderLiveQueue();
+            }
+        });
+
+        if (window.BroadcastChannel) {
+            const syncChannel = new BroadcastChannel('courtsync_queue_channel');
+            syncChannel.onmessage = () => {
+                renderLiveQueue();
+            };
+        }
+    });
+</script>
+
+</body>
+</html>
