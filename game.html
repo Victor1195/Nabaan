@@ -104,6 +104,35 @@
       margin-bottom: 2rem;
     }
 
+    /* Mode Selector Container */
+    .mode-container {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      background: #f1f5f9;
+      padding: 0.35rem;
+      border-radius: 12px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 0.65rem;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn.active {
+      background: #23272e;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -162,11 +191,6 @@
       border-radius: 8px;
     }
 
-    .btn-danger {
-      background-color: #ef4444;
-      color: white;
-    }
-    
     .btn-success {
       background-color: #10b981;
       color: white;
@@ -247,7 +271,7 @@
       font-size: 0.75rem;
     }
 
-    /* Modal / Drawer */
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -353,25 +377,33 @@
     <h1 class="page-title">MATCH : ตารางแข่งขัน</h1>
 
     <div class="card">
-      <div class="grid-2">
+      <!-- Mode Toggle -->
+      <div class="mode-container">
+        <button type="button" class="mode-btn active" id="btn-mode-2v2" onclick="setMode('2v2')">👥 ประเภทคู่ (2 VS 2)</button>
+        <button type="button" class="mode-btn" id="btn-mode-1v1" onclick="setMode('1v1')">👤 ประเภทเดี่ยว (1 VS 1)</button>
+      </div>
+
+      <!-- Top Action Buttons -->
+      <div class="grid-2" id="action-buttons-grid">
         <button class="btn btn-dark" id="btn-random">🎲 สุ่มจัดทีมอัตโนมัติ</button>
         <button class="btn btn-dark" id="btn-lock">🔒 ล็อกคู่สมาชิก (Team A)</button>
       </div>
 
-      <div class="grid-4">
-        <div class="form-group">
-          <label>Team A คนที่ 1</label>
+      <!-- Player Inputs -->
+      <div class="grid-4" id="player-grid">
+        <div class="form-group" id="group-a1">
+          <label id="lbl-a1">Team A คนที่ 1</label>
           <input type="text" id="p-a1" class="form-control" placeholder="เลือกหรือพิมพ์ชื่อสมาชิก" list="member-list">
         </div>
-        <div class="form-group">
+        <div class="form-group" id="group-a2">
           <label>Team A คนที่ 2</label>
           <input type="text" id="p-a2" class="form-control" placeholder="เลือกหรือพิมพ์ชื่อสมาชิก" list="member-list">
         </div>
-        <div class="form-group">
-          <label>Team B คนที่ 1</label>
+        <div class="form-group" id="group-b1">
+          <label id="lbl-b1">Team B คนที่ 1</label>
           <input type="text" id="p-b1" class="form-control" placeholder="เลือกหรือพิมพ์ชื่อสมาชิก" list="member-list">
         </div>
-        <div class="form-group">
+        <div class="form-group" id="group-b2">
           <label>Team B คนที่ 2</label>
           <input type="text" id="p-b2" class="form-control" placeholder="เลือกหรือพิมพ์ชื่อสมาชิก" list="member-list">
         </div>
@@ -379,6 +411,7 @@
 
       <datalist id="member-list"></datalist>
 
+      <!-- Bottom Action Buttons -->
       <div class="grid-2">
         <button class="btn btn-dark" id="btn-waiting-modal">⏳ รอจับคู่ (0 คน)</button>
         <button class="btn btn-navy" id="btn-add-queue">เพิ่มคิวการแข่งขัน</button>
@@ -425,6 +458,7 @@
 
   <script>
     // State Data
+    let currentMode = '2v2'; // '2v2' หรือ '1v1'
     let waitingPool = ["ตูน", "บิ๊ก", "ปอนด์", "เจมส์", "เบส", "นัท", "เอ็กซ์", "อาร์ม"];
     let queues = [];
     let isLockedTeamA = false;
@@ -436,6 +470,11 @@
       b1: document.getElementById('p-b1'),
       b2: document.getElementById('p-b2')
     };
+    const playerGrid = document.getElementById('player-grid');
+    const groupA2 = document.getElementById('group-a2');
+    const groupB2 = document.getElementById('group-b2');
+    const lblA1 = document.getElementById('lbl-a1');
+    const lblB1 = document.getElementById('lbl-b1');
     const btnRandom = document.getElementById('btn-random');
     const btnLock = document.getElementById('btn-lock');
     const btnAddQueue = document.getElementById('btn-add-queue');
@@ -463,6 +502,30 @@
       });
     }
 
+    // Switch Match Mode (1v1 / 2v2)
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('btn-mode-2v2').classList.toggle('active', mode === '2v2');
+      document.getElementById('btn-mode-1v1').classList.toggle('active', mode === '1v1');
+
+      if (mode === '1v1') {
+        groupA2.style.display = 'none';
+        groupB2.style.display = 'none';
+        playerGrid.className = 'grid-2';
+        lblA1.innerText = 'ผู้เล่น ฝ่าย A';
+        lblB1.innerText = 'ผู้เล่น ฝ่าย B';
+        btnLock.style.display = 'none'; // ซ่อนปุ่มล็อกคู่
+        if (isLockedTeamA) toggleLockTeamA();
+      } else {
+        groupA2.style.display = 'flex';
+        groupB2.style.display = 'flex';
+        playerGrid.className = 'grid-4';
+        lblA1.innerText = 'Team A คนที่ 1';
+        lblB1.innerText = 'Team B คนที่ 1';
+        btnLock.style.display = 'flex'; // แสดงปุ่มล็อกคู่
+      }
+    }
+
     // Modal Operations
     function toggleModal(show) {
       modalPool.style.display = show ? 'flex' : 'none';
@@ -472,7 +535,6 @@
     function updateWaitingUI() {
       btnWaitingModal.innerText = `⏳ รอจับคู่ (${waitingPool.length} คน)`;
       
-      // Update Modal Tags
       waitingTags.innerHTML = waitingPool.map((name, index) => `
         <span class="tag">
           ${name}
@@ -480,7 +542,6 @@
         </span>
       `).join('');
 
-      // Update Autocomplete Datalist
       memberDatalist.innerHTML = waitingPool.map(name => `<option value="${name}">`).join('');
     }
 
@@ -498,12 +559,16 @@
 
     // Matchmaking Logic
     function randomizeMatch() {
-      // Determine required slots
-      const slots = isLockedTeamA ? ['b1', 'b2'] : ['a1', 'a2', 'b1', 'b2'];
-      
-      // Check available pool (exclude manually selected players)
-      const currentSelected = Object.values(inputs)
-        .map(i => i.value.trim())
+      let slots = [];
+      if (currentMode === '1v1') {
+        slots = ['a1', 'b1'];
+      } else {
+        slots = isLockedTeamA ? ['b1', 'b2'] : ['a1', 'a2', 'b1', 'b2'];
+      }
+
+      // Filter non-empty manual entries
+      const currentSelected = slots
+        .map(s => inputs[s].value.trim())
         .filter(v => v !== '');
 
       const availablePool = waitingPool.filter(p => !currentSelected.includes(p));
@@ -513,15 +578,13 @@
         return;
       }
 
-      // Shuffle available pool
       const shuffled = [...availablePool].sort(() => 0.5 - Math.random());
-
       slots.forEach((slot, idx) => {
         inputs[slot].value = shuffled[idx];
       });
     }
 
-    // Lock Pair Logic
+    // Lock Pair Logic (Only for 2v2)
     function toggleLockTeamA() {
       isLockedTeamA = !isLockedTeamA;
       if (isLockedTeamA) {
@@ -544,32 +607,56 @@
 
     // Add Match Queue
     function addQueue() {
-      const pA1 = inputs.a1.value.trim();
-      const pA2 = inputs.a2.value.trim();
-      const pB1 = inputs.b1.value.trim();
-      const pB2 = inputs.b2.value.trim();
+      let matchPlayers = [];
+      let teamA = [], teamB = [];
 
-      if (!pA1 || !pA2 || !pB1 || !pB2) {
-        alert('กรุณากรอกผู้เล่นให้ครบทั้ง 4 คน');
-        return;
+      if (currentMode === '1v1') {
+        const pA1 = inputs.a1.value.trim();
+        const pB1 = inputs.b1.value.trim();
+
+        if (!pA1 || !pB1) {
+          alert('กรุณากรอกผู้เล่นให้ครบทั้ง 2 คน');
+          return;
+        }
+        matchPlayers = [pA1, pB1];
+        teamA = [pA1];
+        teamB = [pB1];
+      } else {
+        const pA1 = inputs.a1.value.trim();
+        const pA2 = inputs.a2.value.trim();
+        const pB1 = inputs.b1.value.trim();
+        const pB2 = inputs.b2.value.trim();
+
+        if (!pA1 || !pA2 || !pB1 || !pB2) {
+          alert('กรุณากรอกผู้เล่นให้ครบทั้ง 4 คน');
+          return;
+        }
+        matchPlayers = [pA1, pA2, pB1, pB2];
+        teamA = [pA1, pA2];
+        teamB = [pB1, pB2];
       }
 
-      const matchPlayers = [pA1, pA2, pB1, pB2];
       const hasDuplicates = new Set(matchPlayers).size !== matchPlayers.length;
       if (hasDuplicates) {
         alert('ชื่อผู้เล่นในแมตช์ต้องไม่ซ้ำกัน');
         return;
       }
 
-      // Add to Queue list
-      const matchData = { id: Date.now(), teamA: [pA1, pA2], teamB: [pB1, pB2] };
+      // Add Queue
+      const matchData = {
+        id: Date.now(),
+        mode: currentMode,
+        teamA: teamA,
+        teamB: teamB
+      };
+
       queues.push(matchData);
 
-      // Remove players from waiting pool while playing
+      // Remove active players from waiting pool
       waitingPool = waitingPool.filter(player => !matchPlayers.includes(player));
       updateWaitingUI();
 
-      // Reset Form & Lock
+      // Clear Form Input
       if (isLockedTeamA) toggleLockTeamA();
       inputs.a1.value = '';
       inputs.a2.value = '';
@@ -586,21 +673,27 @@
         return;
       }
 
-      queueContainer.innerHTML = queues.map((q, idx) => `
-        <div class="queue-item">
-          <div>
-            <strong>คิวที่ ${idx + 1}</strong>
-            <div class="match-teams" style="margin-top: 0.3rem;">
-              <span>${q.teamA[0]} & ${q.teamA[1]}</span>
-              <span class="vs-badge">VS</span>
-              <span>${q.teamB[0]} & ${q.teamB[1]}</span>
+      queueContainer.innerHTML = queues.map((q, idx) => {
+        const teamAText = q.mode === '1v1' ? q.teamA[0] : `${q.teamA[0]} & ${q.teamA[1]}`;
+        const teamBText = q.mode === '1v1' ? q.teamB[0] : `${q.teamB[0]} & ${q.teamB[1]}`;
+        const modeBadge = q.mode === '1v1' ? '👤 เดี่ยว' : '👥 คู่';
+
+        return `
+          <div class="queue-item">
+            <div>
+              <strong>คิวที่ ${idx + 1} <span style="font-size:0.8rem; color:#0284c7; font-weight:600; margin-left:0.3rem;">[${modeBadge}]</span></strong>
+              <div class="match-teams" style="margin-top: 0.3rem;">
+                <span>${teamAText}</span>
+                <span class="vs-badge">VS</span>
+                <span>${teamBText}</span>
+              </div>
             </div>
+            <button class="btn btn-sm btn-success" style="width: auto;" onclick="completeMatch(${q.id})">
+              ✓ จบการแข่งขัน (คืนเข้าแถว)
+            </button>
           </div>
-          <button class="btn btn-sm btn-success" style="width: auto;" onclick="completeMatch(${q.id})">
-            ✓ จบการแข่งขัน (คืนเข้าแถว)
-          </button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     // Finish match and return players to pool
@@ -608,10 +701,9 @@
       const matchIndex = queues.findIndex(q => q.id === id);
       if (matchIndex !== -1) {
         const match = queues[matchIndex];
-        // Re-add players to waiting pool
         const matchPlayers = [...match.teamA, ...match.teamB];
-        matchPlayers.forEach(player => addMemberToPool(player));
         
+        matchPlayers.forEach(player => addMemberToPool(player));
         queues.splice(matchIndex, 1);
         renderQueueList();
       }
